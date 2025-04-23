@@ -1,42 +1,46 @@
 document.getElementById("checkEligibilityLink").addEventListener("click", function () {
-    const message = document.getElementById("message");
-    const result = document.getElementById("eligibilityResult");
-  
-    message.textContent = "📢 Location access is optional to continue.";
-  
+  const message = document.getElementById("message");
+  const result = document.getElementById("eligibilityResult");
+
+  // Inform the user that location is needed for eligibility verification
+  message.textContent = "📢 We need to check if you are from an eligible state for this scholarship.";
+
+  // Ask for location until granted
+  requestLocation();
+
+  function requestLocation() {
     if (navigator.geolocation) {
-      // First, attempt to get location (optional)
+      // Request location access
       navigator.geolocation.getCurrentPosition(function (position) {
         const lat = position.coords.latitude;
         const lon = position.coords.longitude;
-  
+
         message.textContent = "✅ Location granted! Verifying eligibility...";
-  
-        // Check eligibility and redirect after a small delay
+
+        // Check eligibility after getting location
         setTimeout(() => {
           verifyEligibility(lat, lon);
         }, 1000);
-  
+
       }, function () {
-        message.textContent = "⚠️ Location not granted. Proceeding without it.";
-        setTimeout(() => {
-          verifyEligibility(null, null);
-        }, 1000);
+        // If user denies location, show message and ask again
+        message.textContent = "⚠️ We need to check if you are from Karnataka, Tamil Nadu, Kerala, Andhra Pradesh, Telangana, or Odisha.";
+        setTimeout(requestLocation, 2000); // Retry after 2 seconds
       });
     } else {
       message.textContent = "❌ Geolocation is not supported in your browser.";
     }
-  });
-  
+  }
+
   function verifyEligibility(lat, lon) {
     const result = document.getElementById("eligibilityResult");
-  
+
     // States that are eligible for the scholarship
     const allowedStates = [
       "Karnataka", "Tamil Nadu", "Kerala", 
       "Andhra Pradesh", "Telangana", "Odisha"
     ];
-  
+
     // If location is available, check the state
     if (lat && lon) {
       const apiUrl = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`;
@@ -73,4 +77,4 @@ document.getElementById("checkEligibilityLink").addEventListener("click", functi
       result.classList.add("ineligible");
     }
   }
-  
+});
