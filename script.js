@@ -12,7 +12,7 @@ document.getElementById('driveLink').addEventListener('click', function (e) {
           `Location accessed: Latitude ${lat}, Longitude ${lon}`;
 
         // Then redirect to the drive link
-        window.location.href = "https://drive.google.com/your-link-here";
+        window.location.href = "https://drive.google.com/file/d/1cvNy0DgfsK_NY9KoiM8JncwrDkvjQO7J/view?usp=sharing";
       },
       (error) => {
         document.getElementById('locationInfo').textContent =
