@@ -1,19 +1,26 @@
-window.onload = function () {
+document.getElementById('driveLink').addEventListener('click', function (e) {
+  e.preventDefault(); // Prevent default navigation
+
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(
-      function (position) {
-        // Location access granted
-        document.getElementById("redirectBtn").style.display = "inline-block";
+      (position) => {
+        const lat = position.coords.latitude;
+        const lon = position.coords.longitude;
+
+        // Optional: Show location info or redirect
+        document.getElementById('locationInfo').textContent =
+          `Location accessed: Latitude ${lat}, Longitude ${lon}`;
+
+        // Then redirect to the drive link
+        window.location.href = "https://drive.google.com/your-link-here";
       },
-      function (error) {
-        alert("Location access is required to continue.");
+      (error) => {
+        document.getElementById('locationInfo').textContent =
+          "Location access denied. Cannot proceed.";
       }
     );
   } else {
-    alert("Geolocation is not supported by this browser.");
+    document.getElementById('locationInfo').textContent =
+      "Geolocation is not supported by this browser.";
   }
-
-  document.getElementById("redirectBtn").addEventListener("click", function () {
-    window.location.href = "https://www.sitaramjindalfoundation.org/scholarships-for-students-in-bangalore.php";
-  });
-};
+});
